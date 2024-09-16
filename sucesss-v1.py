@@ -6,7 +6,7 @@ url = 'https://www.vfsvisaonline.com/Netherlands-Global-Online-Appointment_Zone2
 
 headers = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:129.0) Gecko/20100101 Firefox/129.0",
-    "Cookie": "_cfuvid=kOCj8.C8RXrR1z02.eI8fNw9XTHQP41uggtsXLCGuT0-1726499190246-0.0.1.1-604800000; ASP.NET_SessionId=c5b0olldtpw1mi5ypno4bbkf; cf_chl_rc_i=1; __cf_bm=NACBx7F4a3S8F._foZKXfM58ZSxUCEjGoxXkrOe9lXY-1726505880-1.0.1.1-0zhhzQ20S00tGQc4OjBhrlLpZVDn5FGiDGE0SsywL9hMbh48Grw2WO5B.d.oLvwXaxWU7ksCaLVI5E9K9J9hdA; cf_clearance=gJwzq5_JIBvncPgayYgMMmLKcf090TDTE8.volph8fs-1726505883-1.2.1.1-y7GlBqyhJNFK33Uwgf25rWf0AJinsLhPJ0UBSwUYe7z_baziLseTigrTmjAG7XIKTJ1kAYVRFLzeHqG3jmSGZj3mBHN2k34PKcaxLlXLLWbuqa4k8qGpVxrFk2A1IkZY_Qc49iJsqMRfviAxK8BjA5w1.tCXie2yI37j3NLiZ7QwRiKSRTbc9xyqXAZ9PvoJsVKWu_yO4xs5W5bOHEPlyJO98H8KT6mGrBDTske354lwVQfVaODP7JCS1melvfmqjrZ0BOakt8mZA2dzMTtIPcn2.p2s2AczYRbfqyKlLZPidtw7bhH5JSONobK7XxWTmKSL75bQmf2KU.O2vfEgbu14akdfoLwYLV8obo.OIdm_Vxugq6rCDlbyfp6VsxsY"
+    "Cookie": "_cfuvid=jnfcctE.Mup.ObFCvP2F7AbCYbpOOuPJR5xjsjKwnp0-1726461560229-0.0.1.1-604800000; ASP.NET_SessionId=krf1lbmuj5qetrfhv0yy04md; __cf_bm=51nuzL4FKJIpHIAtlnUN8eW03ycJKuhzQTprFfSy12c-1726522051-1.0.1.1-3cenHEqxaIhM3oXYETdUrNw0eJN2Rm6CrFYwwxLcjRGDoRwvb6LpOZND8AHH7Nx9obVPyazQRbsdzeXSHoC8VA; cf_clearance=eWugLbx9Cx0rF2HJPedsUSPeYOHWuBqaAD.M7g9Y5WM-1726522053-1.2.1.1-YFsI4xC9OJjVp5DcoJ1M1Giann5DMpUAQo.PBqD1QtE453FH.FU4mCbUGTTYDgUvJF6lMui5fKoj883phXFRUdWvFSWbKzA9SHt0lnaOBqImwNusi222dJeNsLUUDZ263v3MgOQJg7uPHc8Rdi68Hw88pSQTJW._1H2EwKPVAd5gFzuWZFzvf0VDzx5L7BrXR.J9ZpapZW_F5enzjnXn77dEITebCduIxRC1iscxMVEwnP3gbp5i6dGmlaLNH4jtXgUZ61iLVhwXIMS5oW1ygIeJkUYUK7VaEEzkMMaxhE0QN772sKElvE01Mfv9JSO5IAB89w9sRh.SKGTeZrDzuQ2hTwbCRabcOk86rWPxsucjHquAPE9e1UEoniIKvwfb"
 }
 
 # Create a session to handle cookies
