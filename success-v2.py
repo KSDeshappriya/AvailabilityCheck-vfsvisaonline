@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from DrissionPage import ChromiumPage
 from CloudflareBypasser import CloudflareBypasser
+import time
 
 # URL of the website to scrape
 url = 'https://www.vfsvisaonline.com/Netherlands-Global-Online-Appointment_Zone2/AppScheduling/AppWelcome.aspx?P=b0KsiJlv+LIdjKDvIvW+nLNY7GnUFdfuwQj4DXbs4vo='
@@ -72,6 +73,7 @@ form_data.update({
 # Submit the second form
 submit_url = 'https://www.vfsvisaonline.com/Netherlands-Global-Online-Appointment_Zone2/AppScheduling/AppSchedulingGetInfo.aspx?P=wpmn7S46C72lQRV%2f1kDyNQ%3d%3d'
 response2 = session.post(submit_url, headers=headers ,data=form_data)
+print(response2.status_code)  # Debugging line
 
 # Check the response
 if response2.status_code == 200:
@@ -81,10 +83,11 @@ if response2.status_code == 200:
 
     # <span class="Validation" id="plhMain_lblMsg">
     error_message = result_soup.find('span', {'id': 'plhMain_lblMsg'})
-    if error_message:
+    if error_message.text:
         print(error_message.text)
     else:
-        print(result_soup.prettify())
+        print(f"{time.ctime()} : Available Appointment Dates")
+        # print(result_soup.prettify())
 else:
     print(f"Failed to submit form. Status code: {response2.status_code}")
     print(response2.text)  # Debugging line
