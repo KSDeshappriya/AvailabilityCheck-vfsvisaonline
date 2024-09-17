@@ -14,11 +14,6 @@ driver.get(url)
 cf_bypasser = CloudflareBypasser(driver)
 cf_bypasser.bypass()
 
-# Step to extract cookies and convert them into a dictionary
-cookies = cf_bypasser.get_cookies()
-print(cookies)
-# cookie_dict = cookies
-
 # Extract headers from ChromiumPage to mimic the real browser
 headers = cf_bypasser.get_headers()
 
