@@ -1,0 +1,132 @@
+import time
+from DrissionPage import ChromiumPage
+
+class CloudflareBypasser:
+    def __init__(self, driver: ChromiumPage, max_retries=-1, log=True):
+        self.driver = driver
+        self.max_retries = max_retries
+        self.log = log
+
+    def search_recursively_shadow_root_with_iframe(self,ele):
+        if ele.shadow_root:
+            if ele.shadow_root.child().tag == "iframe":
+                return ele.shadow_root.child()
+        else:
+            for child in ele.children():
+                result = self.search_recursively_shadow_root_with_iframe(child)
+                if result:
+                    return result
+        return None
+
+    def search_recursively_shadow_root_with_cf_input(self,ele):
+        if ele.shadow_root:
+            if ele.shadow_root.ele("tag:input"):
+                return ele.shadow_root.ele("tag:input")
+        else:
+            for child in ele.children():
+                result = self.search_recursively_shadow_root_with_cf_input(child)
+                if result:
+                    return result
+        return None
+    
+    def locate_cf_button(self):
+        button = None
+        eles = self.driver.eles("tag:input")
+        for ele in eles:
+            if "name" in ele.attrs.keys() and "type" in ele.attrs.keys():
+                if "turnstile" in ele.attrs["name"] and ele.attrs["type"] == "hidden":
+                    button = ele.parent().shadow_root.child()("tag:body").shadow_root("tag:input")
+                    break
+            
+        if button:
+            return button
+        else:
+            # If the button is not found, search it recursively
+            self.log_message("Basic search failed. Searching for button recursively.")
+            ele = self.driver.ele("tag:body")
+            iframe = self.search_recursively_shadow_root_with_iframe(ele)
+            if iframe:
+                button = self.search_recursively_shadow_root_with_cf_input(iframe("tag:body"))
+            else:
+                self.log_message("Iframe not found. Button search failed.")
+            return button
+
+    def log_message(self, message):
+        if self.log:
+            print(message)
+
+    def click_verification_button(self):
+        try:
+            button = self.locate_cf_button()
+            if button:
+                self.log_message("Verification button found. Attempting to click.")
+                button.click()
+            else:
+                self.log_message("Verification button not found.")
+
+        except Exception as e:
+            self.log_message(f"Error clicking verification button: {e}")
+
+    def is_bypassed(self):
+        try:
+            title = self.driver.title.lower()
+            return "just a moment" not in title
+        except Exception as e:
+            self.log_message(f"Error checking page title: {e}")
+            return False
+
+    def bypass(self):
+        
+        try_count = 0
+
+        while not self.is_bypassed():
+            if 0 < self.max_retries + 1 <= try_count:
+                self.log_message("Exceeded maximum retries. Bypass failed.")
+                break
+
+            self.log_message(f"Attempt {try_count + 1}: Verification page detected. Trying to bypass...")
+            self.click_verification_button()
+
+            try_count += 1
+            time.sleep(2)
+
+        if self.is_bypassed():
+            self.log_message("Bypass successful.")
+        else:
+            self.log_message("Bypass failed.")
+
+    # example using: cookies = cf_bypasser.get_cookies()
+    # "Cookie": "_cfuvid=SrDIqZ664n1AX2mnsJlrjy4Sjew5QbOG_kdgdeGEDVE-1726520519350-0.0.1.1-604800000; cf_clearance=dgntemflpJaffaorE5zbFSXfN5HD5TJoFOGR5JWentw-1726520514-1.2.1.1-C3r0FQNs0BU9l9FapkF3Oran1tv_1DftJRTuyHU1alDJkXLj9l_VZ_pLsfRjUrFxoWEMSbqrJhLcnhksjWCyEaV05_zPc8myVszkwnLqmAf17bSQBQ2YHmB6NMrbAMtVEdtmbAivaV.oS0ev0EcsVIYCw1wevsvgqcuswRBFEFHLpKe3THMMStzXi714_Dx_IP_qCSnfAZfY0gCDe02TOqKLqF3ujSwE4M4YILbGh5TNHhpJzmtLjGdwLGWnE86c4n.ALN3ZqmW8gk28q1DsJXvINgo_vNWle3OMa0sdW0pwBQaKs8oUUR7hqbPwcWyutWTGpj59w4nLoQfps8ibHeYDoC6HeXj7n0_bNywpKSs34G2tp3NFRqlO.LP1l9xI6cigUOWlrMM9UFrP5DBYAaoXURKQHyzF05a70m5LjuY; __cf_bm=2Ofr_j.lVFn_TNvxAa4KhKA1hV4F3AsVyxa1_pJjM4c-1726519975-1.0.1.1-rdKMGHLRUMgaxgwgz9tihrI0yFreHFz_NjqrmhyeMJlo4chogXoH7EDtFfECcuUVXv9MVPv9LANIl0TvDb_8jg"
+
+    def get_cookies(self):
+        bypassed = self.is_bypassed()
+        if not bypassed:
+            self.log_message("Page not bypassed. Cookies extraction failed.")
+            return None
+        else:
+            self.log_message("Extracting cookies...")
+            cookies = self.driver.cookies()
+            y = ""
+            for cookie in cookies:
+                # Corrected line
+                y += f"{cookie['name']}={cookie['value']}; "
+            return y
+        
+    # example using: headers = cf_bypasser.get_headers()
+    # headers = {
+    #     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:129.0) Gecko/20100101 Firefox/129.0',
+    # }
+    def get_headers(self):
+        bypassed = self.is_bypassed()
+        if not bypassed:
+            self.log_message("Page not bypassed. Headers extraction failed.")
+            return None
+        else:
+            self.log_message("Extracting headers...")
+            headers = {
+                'User-Agent': self.driver.user_agent,  # Removed the parenthesis, user_agent is an attribute
+            }
+            cookies = self.get_cookies()
+            if cookies:
+                headers['Cookie'] = cookies
+            return headers
