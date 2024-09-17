@@ -1,0 +1,7 @@
+.venv
+__pycache__
+Cred.py
+debug.html
+Extra
+
+*.session
