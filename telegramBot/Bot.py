@@ -24,33 +24,48 @@ url = 'https://www.vfsvisaonline.com/Netherlands-Global-Online-Appointment_Zone2
 # This will hold the chat ID for periodic notifications
 user_chat_id = None
 
+# Save the headers globally after successfully retrieving them once
+global_headers = None
+
+def load_driver_and_bypass():
+    """Function to load Chromium driver and bypass Cloudflare, returns the headers."""
+    driver = ChromiumPage()
+    driver.get(url)
+    
+    cf_bypasser = CloudflareBypasser(driver)
+    cf_bypasser.bypass()
+
+    # Get headers and close the driver
+    headers = cf_bypasser.get_headers()
+    driver.quit()
+    
+    return headers
+
 async def check_appointments_periodically():
     """Function to check appointments every 60 seconds."""
-    global user_chat_id
+    global user_chat_id, global_headers
+
     while True:
         if user_chat_id:
             try:
-                # Inform user that periodic check is happening
                 await app.send_message(user_chat_id, "Checking for available appointments...")
 
-                # Initialize ChromiumPage and bypass Cloudflare
-                driver = ChromiumPage()
-                driver.get(url)
-
-                cf_bypasser = CloudflareBypasser(driver)
-                cf_bypasser.bypass()
-
-                # Extract headers from ChromiumPage to mimic real browser behavior
-                headers = cf_bypasser.get_headers()
-
-                # Close the driver
-                driver.quit()
+                # If global headers are None, load the driver and bypass Cloudflare
+                if global_headers is None:
+                    global_headers = load_driver_and_bypass()
 
                 # Create a session to handle cookies and requests
                 session = requests.Session()
 
                 # Step 1: Get the initial page to extract hidden form fields
-                response = session.get(url, headers=headers)
+                response = session.get(url, headers=global_headers)
+                
+                # If the response status is not 200, reload the driver and bypass Cloudflare again
+                if response.status_code != 200:
+                    await app.send_message(user_chat_id, "Error: Response status not 200, reloading driver...")
+                    global_headers = load_driver_and_bypass()
+                    response = session.get(url, headers=global_headers)
+
                 response.raise_for_status()
 
                 # Parse the initial page
@@ -72,7 +87,7 @@ async def check_appointments_periodically():
                 }
 
                 # Submit the first form
-                response1 = session.post(url, headers=headers, data=payload_1)
+                response1 = session.post(url, headers=global_headers, data=payload_1)
                 response1.raise_for_status()
 
                 # Step 2: Parse the new page after the first submission
@@ -91,7 +106,7 @@ async def check_appointments_periodically():
 
                 # Submit the second form
                 submit_url = 'https://www.vfsvisaonline.com/Netherlands-Global-Online-Appointment_Zone2/AppScheduling/AppSchedulingGetInfo.aspx?P=wpmn7S46C72lQRV%2f1kDyNQ%3d%3d'
-                response2 = session.post(submit_url, headers=headers, data=form_data)
+                response2 = session.post(submit_url, headers=global_headers, data=form_data)
                 response2.raise_for_status()
 
                 if response2.status_code == 200:
