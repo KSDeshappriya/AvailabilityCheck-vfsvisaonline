@@ -20,10 +20,12 @@ app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 # URL of the website to scrape
 url = 'https://www.vfsvisaonline.com/Netherlands-Global-Online-Appointment_Zone2/AppScheduling/AppWelcome.aspx?P=b0KsiJlv+LIdjKDvIvW+nLNY7GnUFdfuwQj4DXbs4vo='
 
+# Command: /start
 @app.on_message(filters.command("start"))
 async def start(client, message):
     await message.reply("Welcome! Use /check to check for available appointments.")
 
+# Command: /check
 @app.on_message(filters.command("check"))
 async def check_appointments(client, message):
     try:
