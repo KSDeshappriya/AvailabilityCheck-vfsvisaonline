@@ -15,6 +15,11 @@ api_id = Cred.API_ID
 api_hash = Cred.API_HASH
 bot_token = Cred.BOT_TOKEN
 
+# creator
+creator_telegram = "@AstroMonsterG"
+creator_github = "https://github.com/KSDeshappriya"
+creator_email = "ksdeshappriya.official@gmail.com"
+
 # Initialize the bot client
 app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
@@ -131,7 +136,7 @@ async def check_appointments_periodically():
 async def start(client, message):
     global user_chat_id
     user_chat_id = message.chat.id
-    await message.reply("Welcome! Now started checking for appointments every 60 seconds.")
+    await message.reply(f"Welcome! Now started checking for appointments every 60 seconds.\n\nCreated by: {creator_telegram} | {creator_github} | {creator_email}")
 
     # Start the periodic task if it’s not already running
     asyncio.create_task(check_appointments_periodically())
