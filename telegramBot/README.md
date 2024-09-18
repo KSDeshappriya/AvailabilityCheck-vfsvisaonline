@@ -1,78 +1,116 @@
-### Step-by-step Guide:
+# Appointment Checking Bot (vfsvisaonline)
 
-1. **Set Up the Bot with Pyrogram**:
-   - First, ensure you have Pyrogram installed and a bot token from the Telegram BotFather.
+## Project Overview
+
+This project is a Telegram bot designed to monitor visa appointment availability on the Dutch embassy/consulate website. It scrapes the website for updates, bypassing Cloudflare protection and periodically notifies the user about available appointment slots. The bot is built using Python, Pyrogram, BeautifulSoup, DrissionPage, and a custom Cloudflare bypasser.
+
+## Features
+
+- **Telegram Bot**: Sends periodic updates to users regarding appointment availability.
+- **Cloudflare Bypass**: Uses a custom Chromium-based driver to bypass Cloudflare protection.
+- **Periodic Checking**: Automatically checks the appointment page every 60 seconds.
+- **Error Handling**: Notifies the user in case of errors or unavailability of appointments.
+- **Command Support**:
+  - `/start` to begin checking for appointments.
+  - `/stop` to halt the appointment checks.
+
+## Requirements
+
+### Python Packages
+
+- `pyrogram`
+- `beautifulsoup4`
+- `urllib`
+- `requests`
+- `DrissionPage`
+- `pyvirtualdisplay`
+- `asyncio`
+
+Install the required packages using the command:
+
+```bash
+pip install -r requirements.txt
+```
+
+### System Dependencies
+
+Ensure the following system dependencies are installed:
+
+- `Google Chrome`
+- `Chromedriver`
+- `xvfb`
+- Other libraries listed in the Dockerfile (e.g., `libx11-xcb1`, `libnss3`, etc.)
+
+## Credentials Setup
+
+A separate file named `Cred.py` is required for storing API credentials:
+
+```python
+class Cred:
+    API_ID = "your_api_id"
+    API_HASH = "your_api_hash"
+    BOT_TOKEN = "your_bot_token"
+```
+
+Make sure to replace the values with the appropriate credentials from your [my.telegram.org](https://my.telegram.org).
+
+## Cloudflare Bypasser
+
+A custom module `CloudflareBypasser.py` is used to bypass Cloudflare's protection on the target website. This module utilizes the DrissionPage library to load the website in a headless Chrome browser and extract the necessary headers for making subsequent requests.
+
+## How it Works
+
+1. **Bot Initialization**: The bot is initialized with `api_id`, `api_hash`, and `bot_token`. When the user sends the `/start` command, the bot begins checking the specified URL for appointment availability.
+2. **Bypassing Cloudflare**: The bot uses a Chromium browser to load the webpage, bypass Cloudflare, and extract necessary headers for further requests.
+3. **Form Submissions**: After bypassing Cloudflare, the bot performs a series of GET and POST requests to navigate through the appointment booking process, scraping hidden fields, and submitting form data.
+4. **Notifications**: If appointments are available, the bot notifies the user. It also handles error cases like Cloudflare reauthentication or page access issues.
+5. **Periodic Checking**: The bot checks for updates every 60 seconds.
+
+## Bot Commands
+
+- **/start**: Starts the bot and begins checking for available appointments every 60 seconds.
+- **/stop**: Stops the appointment checking process.
+
+## Docker Setup
+
+To run the bot inside a Docker container:
+
+1. **Build the Docker Image**:
 
    ```bash
-   pip install pyrogram
+   docker build -t appointment-checker-bot .
    ```
+2. **Run the Docker Container**:
 
    ```bash
-   pip install -r requirements.txt
+   docker run -d appointment-checker-bot
    ```
 
-   - You should create Cred.py. Like this,
-        ```python
-        class Cred:
-            # For authentications
-            API_ID =   # Telegram API ID
-            API_HASH =   # Telegram API Hash
-            BOT_TOKEN =  # Telegram Bot Token
-        ```
+### Dockerfile Breakdown
 
-To check for appointments every 60 seconds, you can run the `check_appointments` function periodically using Python's `asyncio` and scheduling methods. Since you're working within Pyrogram, which is asynchronous, it’s important to set up a background task that triggers the check every 60 seconds.
+- **Base Image**: The base image is `python:3.12.6-slim`.
+- **Chrome and ChromeDriver**: Google Chrome and ChromeDriver are installed to enable Chromium-based browsing for bypassing Cloudflare.
+- **Python Dependencies**: All necessary Python libraries are installed.
+- **Bot Script**: The bot script (`Bot200E.py`) is copied into the container and executed.
 
-Here’s how you can modify your bot to include periodic checks:
+## Usage
 
-### Steps to Implement Periodic Checks:
+After starting the bot, it will periodically check the Dutch embassy/consulate website for available appointments. Users will be notified directly through Telegram.
 
-1. **Use `asyncio` to Run a Task Periodically**:
-   Pyrogram works with `asyncio`, so you can schedule a task to run every 60 seconds.
+### Start Bot
 
-2. **Create a Background Task**:
-   You can run a background task within Pyrogram using `asyncio.create_task`.
+To start the bot, use the `/start` command. The bot will then begin sending periodic updates about appointment availability every 60 seconds.
 
-3. **Notify the User Periodically**:
-   When new updates or appointment slots are available, you can send the information to the user.
+### Stop Bot
 
-To improve the efficiency of the bot and avoid loading the driver again and again unless necessary, you can implement a logic where the driver is only loaded if the `response.status_code` is not 200. You can save the `headers` after the initial successful retrieval and reuse them in future requests.
+To stop the bot from checking appointments, use the `/stop` command.
 
-### Steps:
-1. Load the `driver` and bypass Cloudflare only the first time.
-2. If `response.status_code` is not 200, reload the `driver` and update the `headers`.
-3. If `response.status_code` is 200, reuse the existing `headers` in future requests.
+## License
 
-### Key Changes:
-1. **Global `global_headers`:**
-   - The headers retrieved from `cf_bypasser.get_headers()` are stored in a global variable `global_headers`.
-   - This way, the driver and Cloudflare bypass only happen once, unless an issue occurs.
+This project is licensed under the **CC BY-NC 4.0 License**. See the [LICENSE](https://creativecommons.org/licenses/by-nc/4.0/) file for more details.
 
-2. **`load_driver_and_bypass` Function:**
-   - A helper function that encapsulates the logic of loading the Chromium driver, bypassing Cloudflare, and extracting headers. This function is called when the headers are not available or if a response fails.
+## Author Information
 
-3. **Conditional Driver Reloading:**
-   - If the initial `response.status_code` is not 200, the driver is reloaded to bypass Cloudflare again and refresh the headers.
-
-4. **Global `user_chat_id`:**
-   - A global variable `user_chat_id` is used to store the ID of the user to whom appointment updates will be sent periodically.
-
-5. **`check_appointments_periodically` Function:**
-   - This function runs an infinite loop (`while True`) and checks for appointments every 60 seconds using `asyncio.sleep(60)` to pause the loop.
-   - The function sends messages to the user with the result of each check.
-
-6. **`/start` Command:**
-   - When the user sends the `/start` command, their chat ID is saved, and the periodic checking starts with `asyncio.create_task`.
-   
-7. **`/stop` Command:**
-   - This command allows the user to stop the periodic checking by setting `user_chat_id` to `None`.
-
-### Summary of the Flow:
-- When the user sends `/start`, the bot will begin checking for appointments every 60 seconds and sending updates to the user.
-- If the user wants to stop receiving periodic updates, they can send the `/stop` command.
-
-### How It Works:
-1. **First Request**: The driver is loaded, and the headers are retrieved using `cf_bypasser`. These headers are stored in the `global_headers` variable.
-2. **Subsequent Requests**: The bot reuses the headers for future requests. Only if a non-200 status is encountered will the driver be reloaded, and the headers refreshed.
-3. **Periodic Check**: The `check_appointments_periodically` function continues to check for appointments every 60 seconds without reloading the driver unless necessary.
-
-This approach optimizes performance by minimizing the number of times the driver is loaded and bypassed for Cloudflare, while ensuring that failures due to Cloudflare protection can be handled gracefully by reloading when needed.
+- **Telegram**: [@AstroMonsterG](https://t.me/AstroMonsterG)
+- **GitHub**: [KSDeshappriya](https://github.com/KSDeshappriya)
+- **Email**: [ksdeshappriya.official@gmail.com](ksdeshappriya.official@gmail.com)
