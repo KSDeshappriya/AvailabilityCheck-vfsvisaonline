@@ -104,6 +104,18 @@ This script continues the process by handling cookies, extracting additional hid
 - If you encounter issues with form submission, verify that the hidden fields and form parameters are correctly extracted and updated.
 - Check for changes in the website's structure or parameters that may require updates to the script.
 
+## Telegram Bot Integration
+
+This project also includes a Telegram bot that can be deployed as a Docker container. You can find the bot's code and Dockerfile in the [`telegramBot`](./telegramBot/) directory. This bot allows you to check for appointment availability and receive notifications when slots open up, directly through Telegram. 
+
+**To run the bot:**
+
+1. **Build the Docker image:** 
+   ```bash
+   cd telegramBot
+   docker build -t telegram-bot .
+   ```
+
 ## License
 
 This project is licensed under the **CC BY-NC 4.0 License**. See the [LICENSE](https://creativecommons.org/licenses/by-nc/4.0/) file for more details.
