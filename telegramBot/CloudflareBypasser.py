@@ -1,5 +1,5 @@
 import time
-from DrissionPage import ChromiumPage
+from DrissionPage import WebPage, ChromiumOptions, ChromiumPage
 
 class CloudflareBypasser:
     def __init__(self, driver: ChromiumPage, max_retries=-1, log=True):
@@ -96,8 +96,7 @@ class CloudflareBypasser:
             self.log_message("Bypass failed.")
 
     # example using: cookies = cf_bypasser.get_cookies()
-    # "Cookie": "_cfuvid=SrDIqZ664n1AX2mnsJlrjy4Sjew5QbOG_kdgdeGEDVE-1726520519350-0.0.1.1-604800000; cf_clearance=dgntemflpJaffaorE5zbFSXfN5HD5TJoFOGR5JWentw-1726520514-1.2.1.1-C3r0FQNs0BU9l9FapkF3Oran1tv_1DftJRTuyHU1alDJkXLj9l_VZ_pLsfRjUrFxoWEMSbqrJhLcnhksjWCyEaV05_zPc8myVszkwnLqmAf17bSQBQ2YHmB6NMrbAMtVEdtmbAivaV.oS0ev0EcsVIYCw1wevsvgqcuswRBFEFHLpKe3THMMStzXi714_Dx_IP_qCSnfAZfY0gCDe02TOqKLqF3ujSwE4M4YILbGh5TNHhpJzmtLjGdwLGWnE86c4n.ALN3ZqmW8gk28q1DsJXvINgo_vNWle3OMa0sdW0pwBQaKs8oUUR7hqbPwcWyutWTGpj59w4nLoQfps8ibHeYDoC6HeXj7n0_bNywpKSs34G2tp3NFRqlO.LP1l9xI6cigUOWlrMM9UFrP5DBYAaoXURKQHyzF05a70m5LjuY; __cf_bm=2Ofr_j.lVFn_TNvxAa4KhKA1hV4F3AsVyxa1_pJjM4c-1726519975-1.0.1.1-rdKMGHLRUMgaxgwgz9tihrI0yFreHFz_NjqrmhyeMJlo4chogXoH7EDtFfECcuUVXv9MVPv9LANIl0TvDb_8jg"
-
+    # "Cookie": "aa:bb;cc:dd;ee:ff;"
     def get_cookies(self):
         bypassed = self.is_bypassed()
         if not bypassed:
@@ -109,12 +108,13 @@ class CloudflareBypasser:
             y = ""
             for cookie in cookies:
                 # Corrected line
-                y += f"{cookie['name']}={cookie['value']}; "
+                y += f"{cookie['name']}={cookie['value']};"
             return y
-        
+
     # example using: headers = cf_bypasser.get_headers()
     # headers = {
-    #     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:129.0) Gecko/20100101 Firefox/129.0',
+    #     'User-Agent': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    #     'Cookie': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
     # }
     def get_headers(self):
         bypassed = self.is_bypassed()

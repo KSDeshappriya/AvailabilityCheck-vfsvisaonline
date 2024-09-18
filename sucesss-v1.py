@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 url = 'https://www.vfsvisaonline.com/Netherlands-Global-Online-Appointment_Zone2/AppScheduling/AppWelcome.aspx?P=b0KsiJlv+LIdjKDvIvW+nLNY7GnUFdfuwQj4DXbs4vo='
 
 headers = {
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:129.0) Gecko/20100101 Firefox/129.0",
-    "Cookie": "_cfuvid=jnfcctE.Mup.ObFCvP2F7AbCYbpOOuPJR5xjsjKwnp0-1726461560229-0.0.1.1-604800000; ASP.NET_SessionId=krf1lbmuj5qetrfhv0yy04md; __cf_bm=51nuzL4FKJIpHIAtlnUN8eW03ycJKuhzQTprFfSy12c-1726522051-1.0.1.1-3cenHEqxaIhM3oXYETdUrNw0eJN2Rm6CrFYwwxLcjRGDoRwvb6LpOZND8AHH7Nx9obVPyazQRbsdzeXSHoC8VA; cf_clearance=eWugLbx9Cx0rF2HJPedsUSPeYOHWuBqaAD.M7g9Y5WM-1726522053-1.2.1.1-YFsI4xC9OJjVp5DcoJ1M1Giann5DMpUAQo.PBqD1QtE453FH.FU4mCbUGTTYDgUvJF6lMui5fKoj883phXFRUdWvFSWbKzA9SHt0lnaOBqImwNusi222dJeNsLUUDZ263v3MgOQJg7uPHc8Rdi68Hw88pSQTJW._1H2EwKPVAd5gFzuWZFzvf0VDzx5L7BrXR.J9ZpapZW_F5enzjnXn77dEITebCduIxRC1iscxMVEwnP3gbp5i6dGmlaLNH4jtXgUZ61iLVhwXIMS5oW1ygIeJkUYUK7VaEEzkMMaxhE0QN772sKElvE01Mfv9JSO5IAB89w9sRh.SKGTeZrDzuQ2hTwbCRabcOk86rWPxsucjHquAPE9e1UEoniIKvwfb"
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+    "Cookie": "_cfuvid=rTDmecbeLxRMo4w1XZ.4NfzT2XgmM9ZFBUIQOd5Gpb0-1726643042327-0.0.1.1-604800000; cf_clearance=3meA3zIc_jSJgZBke0Mqg2Ic_Co4nxSWWACeKH_J.ro-1726642977-1.2.1.1-wEg9eDr8W1qXR1A_2uWSXRwQCSiAqm4bRFvxSMi2kBI5wjCvS2YKzI5cSO__4QPFVVKzqE6W5zShkhxi5xygoDTPc.4ZVasr.1ELN8fAZWjt3rcvob2NG9Hx3uec.isopcsDW6djS77M59CEJ6luT9n_1zqm0nyCyHZ4LUhPa4574OEpdu269iYeuMgSu1GH3u5Xvy3drpCwSa61Q0SvRoXTa228r38hOUpMsdFVp2wGfpM40suBOqslRN2O.omzCw3ZrHP8Wr9HtSYe_q5IKKlQs.QnT2wzmguNKmYkdCdEfyNH0Aea5Q8jgJyD1Qle0YwH3fEzP1BhiykV6EF1xCPGZyqiwZ6RxFTb0dZPK55h.4OCxmrY1Zr0EgaLvRuzNH5BnoOWPqpzID9oNHQrcxmaDLQBBbqAxJeKG0w0q9w; __cf_bm=crlhjpebQW57b1kZConVN2U_9zaXhYyEoHEb6Sas3v8-1726642958-1.0.1.1-6ufR47MzLXulT5eaDO47NHwCawDVLa9rk9zc0MYtrYOOm4s_yCW_4EzlAPdP5CA15bTY75ajUGtzv0g.HXyViQ;"
 }
 
 # Create a session to handle cookies
