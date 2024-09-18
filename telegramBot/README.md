@@ -109,7 +109,7 @@ To stop the bot from checking appointments, use the `/stop` command.
 
 This project is licensed under the **CC BY-NC 4.0 License**. See the [LICENSE](https://creativecommons.org/licenses/by-nc/4.0/) file for more details.
 
-## Author Information
+## Creator Information
 
 - **Telegram**: [@AstroMonsterG](https://t.me/AstroMonsterG)
 - **GitHub**: [KSDeshappriya](https://github.com/KSDeshappriya)
