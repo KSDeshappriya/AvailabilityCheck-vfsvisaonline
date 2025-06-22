@@ -1,5 +1,7 @@
 # Dutch Embassy Appointment Availability Checker
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/KSDeshappriya/AvailabilityCheck-vfsvisaonline)
+
 This project is designed to automate the appointment scheduling process for the Dutch embassy/consulate-general in London using Python's `requests` and `BeautifulSoup` libraries for web scraping and Appointment Availability Checking.
 
 ## Project Overview
